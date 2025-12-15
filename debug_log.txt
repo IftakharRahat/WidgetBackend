@@ -1,0 +1,9 @@
+[DEBUG] /start validation - User: 75994f99-23c9-4f83-bc1f-a7bf987620cc, Category: 70a2408c-6d71-4f7a-a8f5-c00bfbb3e0a3
+[DEBUG] Found existing thread? {"id":"abd390f5-e526-45cf-9087-e4a616c6ef21","category_id":"70a2408c-6d71-4f7a-a8f5-c00bfbb3e0a3"}
+[DEBUG] /start validation - User: 75994f99-23c9-4f83-bc1f-a7bf987620cc, Category: c5998a81-e3f8-4103-aff9-ab18b22ca730
+[DEBUG] Found existing thread? null
+[DEBUG] Creating NEW thread for category c5998a81-e3f8-4103-aff9-ab18b22ca730
+[DEBUG] /start validation - User: 75994f99-23c9-4f83-bc1f-a7bf987620cc, Category: 70a2408c-6d71-4f7a-a8f5-c00bfbb3e0a3
+[DEBUG] Found existing thread? {"id":"abd390f5-e526-45cf-9087-e4a616c6ef21","category_id":"70a2408c-6d71-4f7a-a8f5-c00bfbb3e0a3"}
+[DEBUG] /start validation - User: 75994f99-23c9-4f83-bc1f-a7bf987620cc, Category: c5998a81-e3f8-4103-aff9-ab18b22ca730
+[DEBUG] Found existing thread? {"id":"be1c9442-af47-4bde-bc6f-a35b7a665ddf","category_id":"c5998a81-e3f8-4103-aff9-ab18b22ca730"}
