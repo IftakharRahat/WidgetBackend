@@ -17,19 +17,20 @@ export function initializeTelegramBot() {
 
     // Automatic Webhook Setup (Production only)
     if (!isDev && config.telegramWebhookUrl) {
-        const webhookApiUrl = `https://api.telegram.org/bot${config.telegramBotToken}/setWebhook?url=${encodeURIComponent(config.telegramWebhookUrl)}`;
-        fetch(webhookApiUrl)
-            .then(res => res.json())
-            .then((data: { ok: boolean; description?: string }) => {
+        (async () => {
+            try {
+                const webhookApiUrl = `https://api.telegram.org/bot${config.telegramBotToken}/setWebhook?url=${encodeURIComponent(config.telegramWebhookUrl)}`;
+                const res = await fetch(webhookApiUrl);
+                const data = await res.json() as { ok: boolean; description?: string };
                 if (data.ok) {
                     console.log(`🪝 Telegram Webhook set to: ${config.telegramWebhookUrl}`);
                 } else {
                     console.error('❌ Failed to set Telegram Webhook:', data.description);
                 }
-            })
-            .catch((err: Error) => {
-                console.error('❌ Failed to set Telegram Webhook:', err.message);
-            });
+            } catch (err) {
+                console.error('❌ Failed to set Telegram Webhook:', err);
+            }
+        })();
     }
 
     if (isDev) {
