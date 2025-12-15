@@ -15,6 +15,15 @@ export function initializeTelegramBot() {
     bot = new TelegramBot(config.telegramBotToken, { polling: isDev });
     console.log(`🤖 Telegram bot initialized (Polling: ${isDev})`);
 
+    // Automatic Webhook Validation
+    if (!isDev && config.telegramWebhookUrl) {
+        bot.setWebhook(config.telegramWebhookUrl).then(() => {
+            console.log(`🪝 Telegram Webhook set to: ${config.telegramWebhookUrl}`);
+        }).catch(err => {
+            console.error('❌ Failed to set Telegram Webhook:', err.message);
+        });
+    }
+
     if (isDev) {
         // Handle polling events for local dev
         bot.on('message', async (message) => {
