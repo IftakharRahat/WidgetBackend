@@ -35,7 +35,7 @@ export function authMiddleware(req: AuthRequest, res: Response, next: NextFuncti
 
 export function generateToken(payload: { id: string; email: string; role: 'admin' | 'agent' }): string {
     return jwt.sign(payload, config.jwtSecret, {
-        expiresIn: config.jwtExpiresIn
+        expiresIn: config.jwtExpiresIn as jwt.SignOptions['expiresIn']
     });
 }
 
