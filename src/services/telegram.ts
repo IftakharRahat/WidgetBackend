@@ -15,13 +15,21 @@ export function initializeTelegramBot() {
     bot = new TelegramBot(config.telegramBotToken, { polling: isDev });
     console.log(`🤖 Telegram bot initialized (Polling: ${isDev})`);
 
-    // Automatic Webhook Validation
+    // Automatic Webhook Setup (Production only)
     if (!isDev && config.telegramWebhookUrl) {
-        bot.setWebhook(config.telegramWebhookUrl).then(() => {
-            console.log(`🪝 Telegram Webhook set to: ${config.telegramWebhookUrl}`);
-        }).catch(err => {
-            console.error('❌ Failed to set Telegram Webhook:', err.message);
-        });
+        const webhookApiUrl = `https://api.telegram.org/bot${config.telegramBotToken}/setWebhook?url=${encodeURIComponent(config.telegramWebhookUrl)}`;
+        fetch(webhookApiUrl)
+            .then(res => res.json())
+            .then((data: { ok: boolean; description?: string }) => {
+                if (data.ok) {
+                    console.log(`🪝 Telegram Webhook set to: ${config.telegramWebhookUrl}`);
+                } else {
+                    console.error('❌ Failed to set Telegram Webhook:', data.description);
+                }
+            })
+            .catch((err: Error) => {
+                console.error('❌ Failed to set Telegram Webhook:', err.message);
+            });
     }
 
     if (isDev) {
