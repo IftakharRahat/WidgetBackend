@@ -11,6 +11,7 @@ const router = Router();
 // POST /api/v1/chat/start - Start a new chat thread
 router.post('/start', async (req, res) => {
     try {
+        console.log('[DEBUG] /chat/start body:', JSON.stringify(req.body, null, 2));
         const { username, site_origin, category_id, device_hash, user: userData } = req.body;
 
         if (!category_id) {
