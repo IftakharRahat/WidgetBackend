@@ -61,7 +61,7 @@ router.post('/start', async (req, res) => {
                         metadata: userData.metadata,
                         device_hash: device_hash || '',
                         last_seen_at: new Date().toISOString(),
-                        username: username || existingUser.username // Update username if provided
+                        username: (username && username !== 'Guest') ? username : (userData.name || externalId || existingUser.username)
                     })
                     .eq('id', existingUser.id)
                     .select('*')
@@ -74,7 +74,7 @@ router.post('/start', async (req, res) => {
                 const { data: newUser, error: createError } = await supabaseAdmin
                     .from('users')
                     .insert({
-                        username: username || userData.name || 'Customer',
+                        username: (username && username !== 'Guest') ? username : (userData.name || externalId || 'Customer'),
                         site_origin: site_origin || '',
                         device_hash: device_hash || '',
                         external_id: externalId,
