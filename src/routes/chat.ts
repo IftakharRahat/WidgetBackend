@@ -79,7 +79,8 @@ router.post('/start', async (req, res) => {
                 .select('*')
                 .eq('username', username)
                 .eq('site_origin', site_origin || '')
-                .is('external_id', null) // Ensure we don't pick up a real user by accident
+                .eq('device_hash', device_hash) // Match device fingerprint to avoid guest collisions
+                .is('external_id', null)
                 .single();
 
             if (existingUser) {
