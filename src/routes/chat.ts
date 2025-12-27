@@ -25,13 +25,19 @@ router.post('/start', async (req, res) => {
         // Server-side blacklist to prevent shared history from static IDs
         if (externalId) {
             const badIds = [
-                'guest', 'guest_user', 'demo', 'test', 'user', 'undefined', 'null', 'default',
-                'account', 'client', 'customer', 'visitor', 'admin', 'support', 'temp'
+                'guest', 'guest_user', 'guest_user_id', 'demo', 'test', 'user', 'user_id', 'undefined', 'null', 'default',
+                'account', 'client', 'customer', 'visitor', 'visitor_id', 'admin', 'support', 'temp', 'placeholder'
             ];
 
+            const normalizedId = externalId.toString().toLowerCase().trim();
+            const isBad = badIds.includes(normalizedId) ||
+                normalizedId.includes('placeholder') ||
+                normalizedId.includes('demo_user') ||
+                normalizedId === 'user_id_from_db'; // Common placeholder in documentation
+
             // Normalize and check
-            if (badIds.includes(externalId.toString().toLowerCase().trim())) {
-                console.warn(`[Security] Blocked static ID '${externalId}'. Forcing guest mode.`);
+            if (isBad) {
+                console.warn(`[Security] Blocked static/placeholder ID '${externalId}'. Forcing guest mode.`);
                 externalId = null; // Force guest flow
             }
         }
