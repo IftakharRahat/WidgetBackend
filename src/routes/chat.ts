@@ -20,7 +20,21 @@ router.post('/start', async (req, res) => {
 
         // Determine user identity
         let user;
-        const externalId = userData?.id || userData?.external_id;
+        let externalId = userData?.id || userData?.external_id;
+
+        // Server-side blacklist to prevent shared history from static IDs
+        if (externalId) {
+            const badIds = [
+                'guest', 'guest_user', 'demo', 'test', 'user', 'undefined', 'null', 'default',
+                'account', 'client', 'customer', 'visitor', 'admin', 'support', 'temp'
+            ];
+
+            // Normalize and check
+            if (badIds.includes(externalId.toString().toLowerCase().trim())) {
+                console.warn(`[Security] Blocked static ID '${externalId}'. Forcing guest mode.`);
+                externalId = null; // Force guest flow
+            }
+        }
 
         if (externalId) {
             // Real user integration
