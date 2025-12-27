@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { supabaseAdmin } from '../config/supabase.js';
 import { emitToThread } from '../services/socket.js';
-import { generateChatToken } from '../middleware/auth.js';
+import { generateChatToken, verifyChatToken } from '../middleware/auth.js';
 import { assignAgentToThread, sendToTelegram } from '../services/telegram.js';
 import { Server as SocketIOServer } from 'socket.io';
 
@@ -242,6 +242,20 @@ router.post('/:threadId/message', async (req, res) => {
 router.get('/:threadId/messages', async (req, res) => {
     try {
         const { threadId } = req.params;
+
+        // Authorization check: verify chat token
+        const authHeader = req.headers.authorization;
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return res.status(401).json({ error: 'Authorization required' });
+        }
+
+        const token = authHeader.split(' ')[1];
+        const decoded = verifyChatToken(token);
+
+        if (!decoded || decoded.threadId !== threadId) {
+            return res.status(403).json({ error: 'Access denied to this thread' });
+        }
+
         const limit = parseInt(req.query.limit as string) || 50;
         const offset = parseInt(req.query.offset as string) || 0;
 

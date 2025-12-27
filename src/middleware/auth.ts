@@ -45,3 +45,13 @@ export function generateChatToken(payload: { id: string; threadId: string; usern
         expiresIn: '24h'
     });
 }
+
+// Verify chat token and return decoded payload
+export function verifyChatToken(token: string): { id: string; threadId: string; username: string } | null {
+    try {
+        const decoded = jwt.verify(token, config.jwtSecret) as { id: string; threadId: string; username: string };
+        return decoded;
+    } catch (error) {
+        return null;
+    }
+}
